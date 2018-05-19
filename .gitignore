@@ -1,0 +1,6 @@
+*.html
+*.csv
+*.lst
+*_curl_pings
+*_robots
+*_pings
