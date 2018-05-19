@@ -20,8 +20,7 @@ do
   domain=${a[0]}
   
   output_file=${pingdir}/${domain}--stat.out
-#TODO
-  #ping -c 10 -q ${domain} &>  $output_file & 
+  ping -c 10 -q ${domain} &>  $output_file & 
   #((count++))
   #if [[ $count -eq 3 ]]; then
     #exit
@@ -30,8 +29,7 @@ done < ${head_list}
 
 echo ------------------------------
 #TODO turn this into a loop to check every 5 sec rather than wait arbitrary length and die with no recourse
-#TODO
-#sleep 15
+sleep 30
 domains=$( wc -l ${head_list} | cut -d ' ' -f 1 )
 pings=$( grep statistics ${pingdir}/*.out | wc -l | cut -d ' ' -f 1 )
 

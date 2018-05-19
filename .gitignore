@@ -4,3 +4,5 @@
 *_curl_pings
 *_robots
 *_pings
+#vim workfiles
+*.sw?
