@@ -2,3 +2,8 @@ not yet complete scripts to attempt to find what the fastest mirror to download 
 current (right now hard coded) Minimal CentOS ISO
 
 you can just run get_fastest_mirror.sh
+
+the last line printed will provide a URL to be downloaded (TODO: prompt for download)
+
+the python scripts depend on the BeautifulSoup4 python library. https://www.crummy.com/software/BeautifulSoup/
+on centos/RHEL/fedora the package is "python-beautifulsoup4"
