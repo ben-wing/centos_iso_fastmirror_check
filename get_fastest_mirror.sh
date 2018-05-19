@@ -19,7 +19,7 @@
 
 
 # csv, might not have ISOs
-#wget https://www.centos.org/download/full-mirrorlist.csv
+wget https://www.centos.org/download/full-mirrorlist.csv
 #sed -n '/^"Region/p; /^"US"/p' full-mirrorlist.csv > us-mirrorlist.csv
 sed -n '/^"US"/p' full-mirrorlist.csv > us-mirrorlist.csv
 awk -F '","' '{print $5"7/isos/x86_64/"}' us-mirrorlist.csv > mirror_unvalidated_url.lst

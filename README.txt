@@ -5,7 +5,10 @@ you can just run get_fastest_mirror.sh
 
 the last line printed will provide a URL to be downloaded (TODO: prompt for download)
 
-the python scripts depend on the BeautifulSoup4 python library. https://www.crummy.com/software/BeautifulSoup/
-on centos/RHEL/fedora the package is "python-beautifulsoup4"
-
 NB this is hardcoded to only check the mirrors in my country (US) (TODO)
+
+DEPENDENCIES
+  the python scripts depend on the BeautifulSoup4 python library. https://www.crummy.com/software/BeautifulSoup/
+  on centos/RHEL/fedora the package is "python-beautifulsoup4"
+
+  script uses both wget (for download) and cURL (for ease of scripting)
