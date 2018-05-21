@@ -1,8 +1,10 @@
 #!/bin/bash
 
 #TODO check args that $1 is present and either iso or mirror
+#TODO check $2 is present (assume it was validated by get_fastest_mirror)
 
 i_or_m=$1
+ISO=$2
 
 pingdir=${i_or_m}_pings
 url_list=${i_or_m}_url.lst
@@ -105,7 +107,7 @@ echo fastest domain from curlping is ${mindomain}, average curl is $min
 fast_url=$(grep ${mindomain} ${url_list} )
 curl -s ${fast_url} -o ${i_or_m}_fastest.html
 
-append_url=$(python get_minimal_url.py ${i_or_m}_fastest.html)
+append_url=$(python get_minimal_url.py ${i_or_m}_fastest.html $ISO )
 
 echo ${fast_url}${append_url}
 

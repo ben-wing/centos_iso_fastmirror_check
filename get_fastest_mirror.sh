@@ -14,32 +14,76 @@
 #wget http://isoredirect.centos.org/centos/7/isos/x86_64/ -O isoredirect.index.html
 #python get_iso_urls.py isoredirect.index.html > iso_url.lst
 #awk -F "/" '{ print $3, $1"//"$3, $0; }' ${1} > iso_url_head.lst
+#optional
+#./get_iso_robots.sh ?
 #./get_ping_performance.sh iso
 
+function usage() {
+  echo "Usage: $0 country ISO"
+  echo '  country should be one of the "Region" available within full-mirrorlist.csv'
+  echo '  ISO is one of the types of ISOs available "Minimal, DVD, Everything, etc.'
+}
 
 
+if [[ $# -ne 2 ]]; then
+  usage
+  exit 1
+fi
+
+country=$1
+ISO=$2
+case $ISO in
+  Minimal|Everything|DVD|LiveGNOME|LiveKDE|NetInstall)
+    true
+    ;;
+  *)
+    usage
+    echo "Unknown ISO name - $ISO"
+    exit 1
+esac
+  
 # csv, might not have ISOs
-wget https://www.centos.org/download/full-mirrorlist.csv
-#sed -n '/^"Region/p; /^"US"/p' full-mirrorlist.csv > us-mirrorlist.csv
-sed -n '/^"US"/p' full-mirrorlist.csv > us-mirrorlist.csv
-awk -F '","' '{print $5"7/isos/x86_64/"}' us-mirrorlist.csv > mirror_unvalidated_url.lst
+wget -q https://www.centos.org/download/full-mirrorlist.csv -O full-mirrorlist.csv
+egrep "^\"$country\"" full-mirrorlist.csv > us-mirrorlist.csv
+if [[ $( wc -l us-mirrorlist.csv | cut -d ' ' -f 1 ) -eq 0 ]]; then
+  usage
+  echo "No country/region found - $country"
+  exit 1
+fi
+
+#NOTE hardcoded path to version 7 ISOs
+awk -F '","' '($5 ~ /^http/) {print $5"7/isos/x86_64/"}' us-mirrorlist.csv > mirror_unvalidated_url.lst
+
+mirror_html_dir=mirror_htmls
+mkdir -p ${mirror_html_dir}
 while read url
 do
   #echo $url
-  continue
   curl -s -I -X HEAD $url | egrep "^HTTP" | grep 200 > /dev/null
   if [[ $? -eq 0 ]]; then
     #echo success
-    #TODO rebuild this URL from logic at the end of get_ping_performance.sh
+
+    if [[ -z "$append_url" ]];
+    then 
+      domain=$( echo $url | awk -F "/" '{print $3}' )
+      output_html=${mirror_html_dir}/${domain}.html
+      curl -s $url -o ${output_html}
+      append_url=$(python get_minimal_url.py ${output_html} $ISO)
+      echo looking for ISO _ ${append_url} _
+    fi
+
     #TODO add as aditional curlping test?
-    curl -s -I -X HEAD ${url}CentOS-7-x86_64-Minimal-1804.iso | egrep "^HTTP" | grep 200 > /dev/null
+    curl -s -I -X HEAD ${url}${append_url} | egrep "^HTTP" | grep 200 > /dev/null
+
     if [[ $? -eq 0 ]]; then
       #echo validated
       echo $url >> mirror_url.lst
     fi
   fi
-done < mirror_url.lst
+done < mirror_unvalidated_url.lst
 
 awk -F "/" '{ print $3, $1"//"$3, $0; }' mirror_url.lst  > mirror_url_head.lst
 
-./get_ping_performance.sh mirror
+./get_ping_performance.sh mirror $ISO
+
+#TODO cleanup downloaded content

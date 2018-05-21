@@ -1,8 +1,10 @@
 *.html
 *.csv
 *.lst
-*_curl_pings
-*_robots
-*_pings
+*_curl_pings/
+*_robots/
+*_pings/
 #vim workfiles
 *.sw?
+#archive directories
+*.bak/
