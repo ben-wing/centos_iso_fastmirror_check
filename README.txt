@@ -5,8 +5,8 @@ major logic executed as
 ./get_fastest_mirror region iso
 
 region and iso are required
-region is specified in full-mirrorlist.csv as downloaded from centos.org
-iso is specified by the iso names available in the mirror download index
+region is specified in full-mirrorlist.csv as downloaded from https://www.centos.org/download/full-mirrorlist.csv
+iso is specified by the iso names available in the [mirror download index](https://www.centos.org/download/) (DVD, Everything, Minimal as of 2018-11-06)
 
 the last line printed will provide a URL to be downloaded (TODO: prompt for download)
 
