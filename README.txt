@@ -1,4 +1,8 @@
 not yet complete scripts to attempt to find what the fastest mirror to download the 
+notable TODOs:
+  - handle any currently supported version (currently both 7 or 8)
+  - handle either Stream or traditional
+  - improved usage that prompts for currently available iso types, and regions
 current CentOS ISO of your choice (passed in as parameter)
 
 major logic executed as
